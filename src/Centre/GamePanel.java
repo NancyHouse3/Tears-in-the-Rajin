@@ -1,15 +1,19 @@
 package Centre;
 
+import entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable { // making our game panel screen that is based with JPanel
 
     // Screen Settings
-    final int originalTileSize = 16; // default scale of tiles
-    final int scale = 3; // traditional rescale of the standard 16
+    final int originalTileSize = 48; // default scale of tiles. Traditionally, this is 16 but I'll use 48 for reasons explored later
 
-    final int tileSize = originalTileSize * scale; // 48x48 tile
+    // traditional rescale of the standard 16 as I said but since I am rocking 48, it'll be 1. Why 48? because the image would be small on the monitor
+    final int scale = 1;
+
+    public final int tileSize = originalTileSize * scale; // It is assumed that the tiles are too small so we'll resize them
     final int maxScreenCol = 16; // 16 wide
     final int maxScreenRow = 12; // 12 tall
 
@@ -17,8 +21,11 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
 
+    int FPS = 60; // max framerate
+
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // keeps the game going, calls the run method when created
+    Player player = new Player(this,keyH); // deploying the player !!
 
     // setting the player's default position on the screen
     int playerX = 100;
@@ -39,40 +46,42 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     }
 
     @Override
-    public void run() { // Created as a result of the thread
+    public void run() { // Created as a result of the thread. This occurs when the game starts
 
-        while (gameThread != null) {
+        double drawInterval = 1000000000/FPS; // the time in between redraws
+        double delta = 0; // difference
+        long lastTime = System.nanoTime(); // time elapsed
+        long currentTime;
+        long timer = 0;
+        int drawCount = 0;
 
-            // 1 Update! update information the character performs, like positions
-            update();
+        while (gameThread != null) { // out loop that goes on infinitely while the game is goin'
 
-            // 2 Draw the screen with updated information! Do this based on framerate
-            repaint(); // this calls paintComponent! it's weird like that!
+            currentTime = System.nanoTime();
+
+            delta += (currentTime - lastTime) / drawInterval;
+            timer += (currentTime - lastTime);
+            lastTime = currentTime;
+
+            if(delta >= 1) {
+                update();
+                repaint();
+                delta--;
+                drawCount++;
+            }
+
+            if(timer >= 1000000000) {
+                System.out.println("FPS=" + drawCount);
+                drawCount = 0;
+                timer = 0;
+            }
 
         }
-
-        // 1 Update! update information the character performs, like positions
-        update();
-
-        // 2 Draw the screen with updated information! Do this based on framerate
-        repaint(); // this calls paintComponent! it's weird like that!
 
     }
-    public void update() {
+    public void update() { // the things that happen each screen update
 
-        if(keyH.upPressed == true) {
-            playerY -= playerSpeed;
-            System.out.println("◘");
-        } else if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-            System.out.println("☻");
-        } else if (keyH.leftPressed == true) {
-            playerX += playerSpeed;
-            System.out.println("♦");
-        } else if (keyH.rightPressed == true) {
-            playerX += playerSpeed;
-            System.out.println("♠");
-        }
+        player.update();
 
     }
     public void paintComponent(Graphics g) { // this isn't actually *new* this exists already ! Called by 'repaint();'!
@@ -81,9 +90,7 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
 
         Graphics2D g2 = (Graphics2D)g; // similar but different
 
-        g2.setColor(Color.white);
-
-        g2.fillRect(playerX,playerY,tileSize,tileSize);
+        player.draw(g2);
 
         g2.dispose(); // release memories
     }
