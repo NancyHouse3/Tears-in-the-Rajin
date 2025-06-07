@@ -13,6 +13,7 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
+    String character = "spike";
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -30,14 +31,14 @@ public class Player extends Entity{
     public void getPlayerImage() {
         try {
 
-            up1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_b1.png"));
-            up2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_b2.png"));
-            down1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_f1.png"));
-            down2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_f2.png"));
-            left1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_l1.png"));
-            left2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_l2.png"));
-            right1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_r1.png"));
-            right2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/spike_r2.png"));
+            up1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_b1.png"));
+            up2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_b2.png"));
+            down1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_f1.png"));
+            down2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_f2.png"));
+            left1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_l1.png"));
+            left2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_l2.png"));
+            right1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_r1.png"));
+            right2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/"+character+"_r2.png"));
 
         }catch (IOException e) {
             e.printStackTrace();
@@ -62,8 +63,11 @@ public class Player extends Entity{
                 x += speed;
             }
 
+            // sprite changing!!
             spriteCounter++;
-            if (spriteCounter > 10) {
+            System.out.println(spriteCounter);
+            int framesPerImage = (-(speed)+16); // sprite FPS will change based on the movement speed
+            if (spriteCounter > framesPerImage) { // the # here is how many frames it takes for the sprite to change
                 if (spriteNum == 1) {
                     spriteNum = 2;
                 } else if (spriteNum == 2) {
@@ -113,6 +117,6 @@ public class Player extends Entity{
                 }
                 break;
         }
-        g2.drawImage(image,x,y,gp.tileSize,gp.tileSize,null);
+        g2.drawImage(image,x,y,96,96,null);
     }
 }

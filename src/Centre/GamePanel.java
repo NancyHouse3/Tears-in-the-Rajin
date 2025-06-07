@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
 
     public GamePanel() { // making game panel
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.white);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
@@ -70,8 +70,8 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
                 drawCount++;
             }
 
-            if(timer >= 1000000000) {
-                System.out.println("FPS=" + drawCount);
+            if(timer >= 1000000000) { // FPS display
+                //System.out.println("FPS=" + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
