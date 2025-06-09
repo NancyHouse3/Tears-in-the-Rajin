@@ -8,23 +8,32 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
+    public final int screenX;
+    public final int screenY;
+
     String character = "spike";
+    Random random = new Random();
+    int characterSize = 1; // how big player will appear on the screen
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
 
+        screenX = gp.screenWidth / 2 - (gp.tileSize/2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize/2);
+
         setDefaultValues();
         getPlayerImage();
     }
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * random.nextInt(1,21);
+        worldY = gp.tileSize * random.nextInt(1,21);
         speed = 4;
         direction = "down";
     }
@@ -51,21 +60,20 @@ public class Player extends Entity{
 
             if (keyH.upPressed == true) { // movement of character based on keyboard input
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
             } else if (keyH.downPressed == true) {
                 direction = "down";
-                y += speed;
+                worldY += speed;
             } else if (keyH.leftPressed == true) {
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             } else if (keyH.rightPressed == true) {
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
 
             // sprite changing!!
             spriteCounter++;
-            System.out.println(spriteCounter);
             int framesPerImage = (-(speed)+16); // sprite FPS will change based on the movement speed
             if (spriteCounter > framesPerImage) { // the # here is how many frames it takes for the sprite to change
                 if (spriteNum == 1) {
@@ -77,6 +85,7 @@ public class Player extends Entity{
             }
 
         } // end of the if statement
+
     }
 
     public void draw(Graphics2D g2) {
@@ -117,6 +126,6 @@ public class Player extends Entity{
                 }
                 break;
         }
-        g2.drawImage(image,x,y,96,96,null);
+        g2.drawImage(image,screenX,screenY,(characterSize * gp.tileSize),(characterSize * gp.tileSize),null);
     }
 }

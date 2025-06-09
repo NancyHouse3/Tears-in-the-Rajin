@@ -1,6 +1,7 @@
 package Centre;
 
 import entity.Player;
+import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,27 +15,29 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     final int scale = 1;
 
     public final int tileSize = originalTileSize * scale; // It is assumed that the tiles are too small so we'll resize them
-    final int maxScreenCol = 16; // 16 wide
-    final int maxScreenRow = 12; // 12 tall
+    public final int maxScreenCol = 16; // 16 wide
+    public final int maxScreenRow = 12; // 12 tall
 
     //see? Here's out dimensions!
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
+
+    // World Settions !!!!!
+    public final int maxWorldCol = 100;
+    public final int maxWorldRow = 100;
+    public final int worldWidth = tileSize * maxScreenCol;
+    public final int worldHeight = tileSize * maxScreenRow;
 
     int FPS = 60; // max framerate
+    TileManager tileM = new TileManager(this);
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // keeps the game going, calls the run method when created
-    Player player = new Player(this,keyH); // deploying the player !!
-
-    // setting the player's default position on the screen
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4; // the player's speed
+    public Player player = new Player(this,keyH); // deploying the player !!
 
     public GamePanel() { // making game panel
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.white);
+        this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
@@ -53,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
         long lastTime = System.nanoTime(); // time elapsed
         long currentTime;
         long timer = 0;
-        int drawCount = 0;
+        int drawCount = 0; // this thing is used for the FPS counter, i'll use it later
 
         while (gameThread != null) { // out loop that goes on infinitely while the game is goin'
 
@@ -89,6 +92,8 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g; // similar but different
+
+        tileM.draw(g2);
 
         player.draw(g2);
 
