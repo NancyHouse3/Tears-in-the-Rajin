@@ -2,6 +2,7 @@ package entity;
 
 import Centre.GamePanel;
 import Centre.KeyHandler;
+import object.SuperObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,14 +29,32 @@ public class Player extends Entity{
         screenX = gp.screenWidth / 2 - (gp.tileSize/2);
         screenY = gp.screenHeight / 2 - (gp.tileSize/2);
 
+        solidArea = new Rectangle();
+
+        solidArea.x = 20;
+        solidArea.y = 40;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 8;
+        solidArea.height = 8;
+
         setDefaultValues();
         getPlayerImage();
     }
     public void setDefaultValues() {
-        worldX = gp.tileSize * random.nextInt(1,21);
-        worldY = gp.tileSize * random.nextInt(1,21);
+        worldX = gp.tileSize * 41;
+        worldY = gp.tileSize * 27;
         speed = 4;
         direction = "down";
+
+        strengthScore = 5;
+        perceptionScore = 5;
+        enduranceScore = 5;
+        charismaScore = 5;
+        intelligenceScore = 5;
+        agilityScore = 5;
+        luckScore = 5;
+
     }
     public void getPlayerImage() {
         try {
@@ -59,17 +78,40 @@ public class Player extends Entity{
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
 
             if (keyH.upPressed == true) { // movement of character based on keyboard input
+
                 direction = "up";
-                worldY -= speed;
             } else if (keyH.downPressed == true) {
+
                 direction = "down";
-                worldY += speed;
             } else if (keyH.leftPressed == true) {
+
                 direction = "left";
-                worldX -= speed;
             } else if (keyH.rightPressed == true) {
+
                 direction = "right";
-                worldX += speed;
+            }
+
+            //Check tile Collision
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+
+            //check object collision
+            int objIndex = gp.cChecker.checkObject(this,true);
+            interactObject(objIndex);
+
+            // If collision is false, player can move
+            if (collisionOn == false) {
+
+                switch (direction) {
+                    case "up" : worldY -= speed;
+                        break;
+                    case "down" : worldY += speed;
+                        break;
+                    case "left" : worldX -= speed;
+                        break;
+                    case "right" : worldX += speed;
+                        break;
+                }
             }
 
             // sprite changing!!
@@ -86,6 +128,47 @@ public class Player extends Entity{
 
         } // end of the if statement
 
+    }
+
+    public void interactObject(int i) {
+        if (i != -1) {
+
+            SuperObject object = gp.obj[i];
+
+            if (object.classification.equalsIgnoreCase("door")) { // lock picking doors
+                int lockPickDC = object.itemQuality * 2;
+                int playerRoll = random.nextInt(1,21)+lockPickMod;
+
+                if(playerRoll >= lockPickDC) {
+                    System.out.println("You lock picked this door!");
+                    gp.obj[i] = null;
+                }else {
+                    System.err.println("Lock pick failed");
+                }
+            }else {
+                putItemIntoInventory(i);
+            }
+
+        }
+    }
+
+    public void putItemIntoInventory(int worldItemListIndex) {
+        int openSlot = 837;
+
+        for (int s = 0; s < inventory.length; s++) { // checking inventory space
+            if (inventory[s] == null) {
+                openSlot = s;
+            }
+        }
+
+        if (openSlot != 837) { // if there is space
+            inventory[openSlot] = gp.obj[worldItemListIndex]; // add item to free space
+            gp.obj[worldItemListIndex] = null; // cleaning up object // dont draw the object on the map anymore
+
+            System.out.println(inventory[openSlot].displayName+" added to your inventory!");
+        } else { // if there is no space
+            System.err.println("No Storage Space!");
+        }
     }
 
     public void draw(Graphics2D g2) {

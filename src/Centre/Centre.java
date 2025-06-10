@@ -109,6 +109,7 @@ public class Centre { // beginning of the main class, or I chose to call it my '
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        gamePanel.setupObjects();
         gamePanel.startGameThread();
     }
 
