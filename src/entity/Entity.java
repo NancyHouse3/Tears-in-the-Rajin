@@ -17,11 +17,13 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
+    public int compliance = 50; // used for companions and slaves. If people are mistreated, they may rebel
+
     //SPECIAL
     public int strengthScore,perceptionScore,enduranceScore,charismaScore,intelligenceScore,agilityScore,luckScore;
     public int strScoreMod = strengthScore / 2;
     public int perScoreMod = perceptionScore / 2;
-    public int emdScoreMod = enduranceScore / 2;
+    public int endScoreMod = enduranceScore / 2;
     public int chaScoreMod = charismaScore / 2;
     public int intScoreMod = intelligenceScore / 2;
     public int aglScoreMod = agilityScore / 2;
@@ -32,6 +34,13 @@ public class Entity {
     public int lockPickBase = 0;
     public int lockPickScore = lockPickBase + perceptionScore;
     public int lockPickMod = lockPickScore / 8;
+
+    // Basics
+    public int level = 1;
+    public int healthPoints = 14;
+    public int radiationDamage; // 0-1000
+
+    // technical nerd shit
 
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;

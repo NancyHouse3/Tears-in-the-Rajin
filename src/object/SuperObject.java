@@ -11,6 +11,7 @@ public class SuperObject {
     public String name, displayName, classification; // name, how its displayed in game and what kind of object it is
     public boolean collision = false;
     public boolean ranged = false;
+    public boolean radioactive = false; // emits damaging radiation
     public int worldX, worldY;
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public int solidAreaDefaultX = 0;

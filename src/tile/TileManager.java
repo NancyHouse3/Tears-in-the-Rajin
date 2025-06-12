@@ -13,15 +13,16 @@ public class TileManager {
     GamePanel gp;
     public Tile[] tile;
     public int[][] mapTileNum;
+    String map = "compound";
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[10];
+        tile = new Tile[48];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 
         getTileImage();
-        loadMap("maps/world01.txt");
+        loadMap("maps/"+map+".txt");
     }
 
     public void getTileImage() {
@@ -55,6 +56,26 @@ public class TileManager {
 
             tile[7] = new Tile();
             tile[7].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/path.png"));
+
+            tile[8] = new Tile();
+            tile[8].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/brick_darker.png"));
+            tile[8].collision = true;
+
+            // floor
+            tile[9] = new Tile();
+            tile[9].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/stone_tile.png"));
+
+            //fence
+            tile[10] = new Tile();
+            tile[10].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/sand_fence.png"));
+            tile[10].collision = true;
+
+            tile[11] = new Tile();
+            tile[11].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/sand_fence2.png"));
+            tile[11].collision = true;
+
+            tile[12] = new Tile();
+            tile[12].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tile.png"));
 
         }catch (IOException e) {
             e.printStackTrace();

@@ -72,7 +72,11 @@ public class Player extends Entity{
             e.printStackTrace();
         }
     }
-    public void update() {
+    public void update() { // what happens every update
+
+        level = 10;
+
+        healthPoints = (level * 10) * enduranceScore/2;
 
         // if statement that prevents sprite from animating  when not moving
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
