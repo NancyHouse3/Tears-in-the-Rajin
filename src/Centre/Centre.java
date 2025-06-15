@@ -143,6 +143,7 @@ public class Centre { // beginning of the main class, or I chose to call it my '
             }
 
             writer.close();
+            System.out.println("wrote to file");
 
         } catch (IOException e) {
             System.err.println("Oopsie!");

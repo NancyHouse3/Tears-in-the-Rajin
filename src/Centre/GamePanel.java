@@ -16,8 +16,8 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     final int scale = 1;
 
     public final int tileSize = originalTileSize * scale; // It is assumed that the tiles are too small so we'll resize them
-    public final int maxScreenCol = 16; // 16 wide
-    public final int maxScreenRow = 12; // 12 tall
+    public final int maxScreenCol = 24; // Screen Width
+    public final int maxScreenRow = 16; // Screen Height
 
     //see? Here's out dimensions!
     public final int screenWidth = tileSize * maxScreenCol;
@@ -26,16 +26,25 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     // World Settions !!!!!
     public final int maxWorldCol = 100;
     public final int maxWorldRow = 100;
-    public final int worldWidth = tileSize * maxScreenCol;
-    public final int worldHeight = tileSize * maxScreenRow;
 
+    // FPS
     int FPS = 60; // max framerate
-    TileManager tileM = new TileManager(this);
 
+    //System
+    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
+    public UI ui = new UI(this);
+    Font standardFont = new Font("Courier New",Font.PLAIN,18);
+
+    // Audio
+    // One for music, one for sound effects. This way the computer doesn't get confused
+    Sound sound = new Sound();
+    Sound music = new Sound();
     Thread gameThread; // keeps the game going, calls the run method when created
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSett = new AssetSetter(this);
+
+    // Entity & Object
     public Player player = new Player(this,keyH); // deploying the player !!
     public SuperObject obj[] = new SuperObject[25]; // Max # of items that can be displayed on the screen
 
@@ -50,6 +59,8 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     public void setupObjects() {
 
         aSett.setObject();
+
+        playSE(4);
 
         for (SuperObject item : obj) {
             if (item != null) {
@@ -129,7 +140,6 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
             }
 
             if(timer >= 1000000000) { // FPS display
-                System.out.println(player.healthPoints);
                 drawCount = 0;
                 timer = 0;
             }
@@ -142,11 +152,19 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
         player.update();
 
     }
+
+    int reachedSeconds = 0;
+    int longestDraw = 0;
     public void paintComponent(Graphics g) { // this isn't actually *new* this exists already ! Called by 'repaint();'!
 
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D)g; // similar but different
+
+        //Debug
+        long drawStart = 0;
+        if (keyH.displayFPS) {
+            drawStart = System.nanoTime();
+        }
 
         //TILE
         tileM.draw(g2);
@@ -161,6 +179,48 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
         //ENTITIES
         player.draw(g2);
 
+        //UI
+        ui.draw(g2);
+
+        //Debug
+        if(keyH.displayFPS) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.WHITE);
+            int seconds = (int) (passed/1000000);
+            if (seconds > 0) {
+                reachedSeconds++;
+                if (seconds > longestDraw) {
+                    longestDraw = seconds;
+                }
+            }
+
+            String displayText = ("Draw Time: "+passed+"ns ("+passed/1000+"ms)"+", ("+seconds+"s)");
+            g2.setFont(standardFont);
+            g2.drawString(displayText,12,48);
+            g2.drawString("# Long Draw: "+reachedSeconds+" time(s)",12,72);
+            g2.drawString("Longest Draw Time: "+longestDraw+"s",12,96);
+        }
+
         g2.dispose(); // release memories
+    }
+    public void playLoopingMusic(int i) {
+
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+    public void playMusic(int i) {
+
+        music.setFile(i);
+        music.play();
+    }
+    public void stopMusic() {
+        music.stop();
+    }
+    public void playSE(int i) {
+
+        sound.setFile(i);
+        sound.play();
     }
 }

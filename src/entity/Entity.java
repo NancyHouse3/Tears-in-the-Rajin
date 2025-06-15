@@ -13,6 +13,7 @@ public class Entity {
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String direction;
+    public String name;
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -39,6 +40,7 @@ public class Entity {
     public int level = 1;
     public int healthPoints = 14;
     public int radiationDamage; // 0-1000
+    public int kurz = 0;
 
     // technical nerd shit
 

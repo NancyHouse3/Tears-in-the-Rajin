@@ -10,6 +10,7 @@ public class OBJ_Revolver extends SuperObject{
 
         name = "Revolver";
         classification = "Weapon";
+        sellPrice = 575;
 
         itemQuality = 4; // quality of object, affects performance. (1-8)
 

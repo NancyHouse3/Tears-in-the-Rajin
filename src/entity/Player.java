@@ -2,6 +2,7 @@ package entity;
 
 import Centre.GamePanel;
 import Centre.KeyHandler;
+import Centre.Sound;
 import object.SuperObject;
 
 import javax.imageio.ImageIO;
@@ -17,8 +18,7 @@ public class Player extends Entity{
     KeyHandler keyH;
     public final int screenX;
     public final int screenY;
-
-    String character = "spike";
+    String character = "Spike";
     Random random = new Random();
     int characterSize = 1; // how big player will appear on the screen
 
@@ -40,6 +40,8 @@ public class Player extends Entity{
 
         setDefaultValues();
         getPlayerImage();
+
+        name = "Spike Spiegel";
     }
     public void setDefaultValues() {
         worldX = gp.tileSize * 41;
@@ -144,13 +146,19 @@ public class Player extends Entity{
                 int playerRoll = random.nextInt(1,21)+lockPickMod;
 
                 if(playerRoll >= lockPickDC) {
-                    System.out.println("You lock picked this door!");
+                    gp.ui.showCenterMessage("[Lockpick Success!]",Color.white);
                     gp.obj[i] = null;
                 }else {
-                    System.err.println("Lock pick failed");
+                    gp.ui.showCenterMessage("[Lockpick Failed!]",Color.red);
                 }
-            }else {
+            }else if (object.name.equalsIgnoreCase("Cocaine Brick")) {
+                speed += object.itemQuality;
                 putItemIntoInventory(i);
+                gp.ui.showCenterMessage("[Drug High!]",Color.red);
+                gp.playSE(2);
+            } else {
+                putItemIntoInventory(i);
+                gp.playSE(1);
             }
 
         }
@@ -158,6 +166,19 @@ public class Player extends Entity{
 
     public void putItemIntoInventory(int worldItemListIndex) {
         int openSlot = 837;
+
+        //Picking color based on item quality
+        Color textColor;
+        if (gp.obj[worldItemListIndex].itemQuality > 6) {
+            textColor = Color.yellow;
+            if (gp.obj[worldItemListIndex].itemQuality >= 9) {
+                textColor = Color.magenta;
+            }
+        } else if (gp.obj[worldItemListIndex].itemQuality < 4) {
+            textColor = Color.orange;
+        }else {
+            textColor = Color.white;
+        }
 
         for (int s = 0; s < inventory.length; s++) { // checking inventory space
             if (inventory[s] == null) {
@@ -169,9 +190,13 @@ public class Player extends Entity{
             inventory[openSlot] = gp.obj[worldItemListIndex]; // add item to free space
             gp.obj[worldItemListIndex] = null; // cleaning up object // dont draw the object on the map anymore
 
-            System.out.println(inventory[openSlot].displayName+" added to your inventory!");
+
+
+            gp.ui.showMessage(inventory[openSlot].displayName+" added to your inventory!",textColor);
+
+
         } else { // if there is no space
-            System.err.println("No Storage Space!");
+            gp.ui.showCenterMessage("[No Storage Space!]",Color.red);
         }
     }
 
