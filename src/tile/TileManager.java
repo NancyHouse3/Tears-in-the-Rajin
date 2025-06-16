@@ -77,6 +77,46 @@ public class TileManager {
             tile[12] = new Tile();
             tile[12].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tile.png"));
 
+            // Shore tiles
+
+            tile[13] = new Tile();
+            tile[13].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/ts_corner_shore.png"));
+            tile[13].collision = true;
+
+            tile[14] = new Tile();
+            tile[14].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/rs_corner_shore.png"));
+            tile[14].collision = true;
+
+            tile[15] = new Tile();
+            tile[15].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/bs_corner_shore.png"));
+            tile[15].collision = true;
+
+            tile[16] = new Tile();
+            tile[16].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/ls_corner_shore.png"));
+            tile[16].collision = true;
+
+            tile[17] = new Tile();
+            tile[17].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/left_corner_shore.png"));
+            tile[17].collision = true;
+
+            tile[18] = new Tile();
+            tile[18].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/left2_corner_shore.png"));
+            tile[18].collision = true;
+
+            tile[19] = new Tile();
+            tile[19].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/right_corner_shore.png"));
+            tile[19].collision = true;
+
+            tile[20] = new Tile();
+            tile[20].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/right2_corner_shore.png"));
+            tile[20].collision = true;
+
+            tile[21] = new Tile();
+            tile[21].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/water.png"));
+            tile[21].collision = true;
+
+
+
         }catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,7 +151,9 @@ public class TileManager {
 
                     mapTileNum[col][row] = num;
 
-                    col++;
+                    if (col < gp.maxWorldCol) {
+                        col++;
+                    }
                 }
                 if (col == gp.maxWorldCol) {
                     col = 0;

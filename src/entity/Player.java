@@ -44,8 +44,8 @@ public class Player extends Entity{
         name = "Spike Spiegel";
     }
     public void setDefaultValues() {
-        worldX = gp.tileSize * 41;
-        worldY = gp.tileSize * 27;
+        worldX = gp.tileSize * 47;
+        worldY = gp.tileSize * 67;
         speed = 4;
         direction = "down";
 

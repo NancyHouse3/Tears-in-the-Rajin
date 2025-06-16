@@ -55,43 +55,6 @@ public class Centre { // beginning of the main class, or I chose to call it my '
                 float deg0 = hsb[0]*360;
                 int deg2 = (int) deg0;
 
-                // color checking
-
-                /*
-                if (hsb[1] < 0.1 && hsb[2] > 0.9) { // sand
-                    tileValue = 0;
-                } else if (hsb[2] >= 0.4 && hsb[2] <= 0.8 && hsb[1] < 0.3) {
-                    tileValue = 9;
-                } else if (hsb[2] < 0.1) {
-                    tileValue = 4;
-                } else {
-                    float deg = hsb[0]*360;
-                    if (deg >= 0 && deg < 30 && hsb[2] >= 0.6) { // brick
-                        tileValue = 3;
-                    } else if (deg >= 0 && deg < 30 && hsb[2] < 0.6) {
-                        tileValue = 8;
-                    } else if (deg >= 25 && deg < 50 && hsb[2] < 0.5) {
-                        tileValue = 6;
-                    } else if (deg >= 50 && deg < 90 && hsb[2] < 0.5) {
-                        tileValue = 7;
-                    } else if (deg >= 50 && deg < 90 ) {
-                        tileValue = 0;
-                    } else if (deg >= 90 && deg < 150 && hsb[2] >= 0.5) { // well kept grass
-                        tileValue = 1;
-                    } else if (deg >= 90 && deg < 150 && hsb[2] < 0.5) { // standard grass
-                        tileValue = 2;
-                    } else if (deg >= 150 && deg < 210 ) {
-                        tileValue = 5;
-                    } else if (deg >= 210 && deg < 270 ) {
-                        tileValue = 5;
-                    } else if (deg >= 270 && deg < 330 ) {
-                        tileValue = 0;
-                    } else { // brick
-                        tileValue = 3;
-                    }
-                }
-                */
-
                 switch (deg2) {
                     case 0 :
                         tileValue = 3;
@@ -125,8 +88,22 @@ public class Centre { // beginning of the main class, or I chose to call it my '
                             tileValue = 9; // top facing
                         }
                         break;
+                    case 281 :
+                        tileValue = 18 ;
+                        break;
+                    case 282 :
+                        if (hsb[2] > 0.75) {
+                            tileValue = 17;
+                        }else {
+                            tileValue = 15;
+                        }
+                        break;
                     case 283 :
-                        tileValue = 5;
+                        if (hsb[2] > 0.9) {
+                            tileValue = 13;
+                        }else {
+                            tileValue = 5;
+                        }
                         break;
                     default :
                         tileValue = 0;
@@ -143,7 +120,7 @@ public class Centre { // beginning of the main class, or I chose to call it my '
             }
 
             writer.close();
-            System.out.println("wrote to file");
+            System.out.println("wrote to file ("+fileName+")");
 
         } catch (IOException e) {
             System.err.println("Oopsie!");
