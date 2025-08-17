@@ -6,8 +6,9 @@ import java.awt.image.BufferedImage;
 public class UI {
 
     GamePanel gp;
+    Graphics2D g2;
+
     Font arial_20,arial_22B,arial_16B;
-    BufferedImage keyImage;
     public boolean generalUIOn = true;
     public boolean messageOn = false;
     public String message = "[message]";
@@ -54,12 +55,48 @@ public class UI {
         // Some of these are not drawn to fit aspect ratio and since
         // 1) my game isn't resizeable and 2) nobody but me will prolly have this, it's fine
 
-        if (generalUIOn) { // making sure that the UI is on so we don't have stuff happen during conversations and such
+        // making sure that the UI is on, so we don't have stuff happen during conversations and such
+
+        // Tutorial
+        this.g2 = g2;
+        g2.setFont(arial_22B);
+        g2.setColor(Color.white);
+
+        if (gp.gameState == gp.playState) {
+            drawPlayerUI();
+        }else if (gp.gameState == gp.pauseState) {
+            drawPauseScreen();
+        }
+    }
+
+    public int centerTextWidth(String text) {
+        int x;
+
+        int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        x = (gp.screenWidth / 2) - (length / 2);
+
+        return x;
+    }
+
+    void drawPauseScreen () {
+
+        String text = "[PAUSED]";
+
+        int x = centerTextWidth(text);
+
+        int y = gp.screenHeight / 2;
+
+        g2.drawString(text,x,y);
+    }
+
+    void drawPlayerUI () {
+        if (generalUIOn) {
 
             // This is for the UI placement at the bottom.
             int spacing = 2;
             int nameYMult = 39;
 
+            // Setting and Drawing the Stuff
             g2.setColor(uiColor);
             g2.fillRect(0, gp.screenHeight - uiHeight, gp.screenWidth, uiHeight);
 

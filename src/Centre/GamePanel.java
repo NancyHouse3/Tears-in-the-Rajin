@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
 
     //System
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     public UI ui = new UI(this);
     Font standardFont = new Font("Courier New",Font.PLAIN,18);
 
@@ -48,6 +48,11 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     public Player player = new Player(this,keyH); // deploying the player !!
     public SuperObject obj[] = new SuperObject[25]; // Max # of items that can be displayed on the screen
 
+    // GAME STATE
+    public int gameState;
+    public final int playState = 1;
+    public final int pauseState = 2;
+
     public GamePanel() { // making game panel
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -62,6 +67,9 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
 
         playSE(4);
 
+        gameState = playState;
+
+        // Giving display names to the items
         for (SuperObject item : obj) {
             if (item != null) {
 
@@ -149,7 +157,12 @@ public class GamePanel extends JPanel implements Runnable { // making our game p
     }
     public void update() { // the things that happen each screen update
 
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
+        if (gameState == pauseState) {
+
+        }
 
     }
 
